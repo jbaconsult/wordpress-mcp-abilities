@@ -33,6 +33,7 @@ define( __NAMESPACE__ . '\\PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 require_once PLUGIN_PATH . 'includes/class-registry.php';
 require_once PLUGIN_PATH . 'includes/class-handlers.php';
+require_once PLUGIN_PATH . 'includes/class-settings.php';
 
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\on_activate' );
 
@@ -51,6 +52,9 @@ function on_activate(): void {
 
 function boot(): void {
 	load_plugin_textdomain( 'mcp-abilities', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+	// Settings UI is always available so admins can configure regardless of adapter state.
+	Settings::register();
 
 	if ( ! is_mcp_adapter_active() ) {
 		add_action( 'admin_notices', __NAMESPACE__ . '\\render_missing_dependency_notice' );
